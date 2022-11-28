@@ -20,7 +20,7 @@ module "vpc" {
 
   tags = {
     Terraform = "true"
-    Project = var.project_name
+    Project   = var.project_name
     EnvName   = var.env_name
     Component = "base"
   }
