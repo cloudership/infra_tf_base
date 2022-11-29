@@ -7,19 +7,19 @@ variable "env_name" {
 }
 
 variable "aws_availability_zone_letters" {
-  type = list(string)
+  type        = list(string)
   description = <<-EOT
     The letters of the availability zones to use, e.g. ["a", "b", "c"]
   EOT
-  default = ["a", "b", "c"]
+  default     = ["a", "b", "c"]
 }
 
 variable "vpc_subnet_address" {
-  type = string
+  type        = string
   description = "Subnet address for the VPC, e.g. 10.127.0.0"
 }
 
 variable "vpc_subnet_mask_bits" {
-  type = number
+  type        = number
   description = "Subnet mask bits e.g. 16. Recommended this be set to 16"
 }
