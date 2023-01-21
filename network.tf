@@ -11,7 +11,8 @@ module "vpc" {
   enable_nat_gateway = false
   enable_vpn_gateway = false
 
-  enable_dns_support = true
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 
   enable_ipv6                                    = true
   assign_ipv6_address_on_creation                = true
