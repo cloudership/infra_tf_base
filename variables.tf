@@ -10,6 +10,10 @@ variable "root_domain" {
   type = string
 }
 
+variable "enable_expensive" {
+  type = bool
+}
+
 variable "aws_availability_zone_letters" {
   type        = list(string)
   description = <<-EOT
