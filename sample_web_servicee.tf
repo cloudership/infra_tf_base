@@ -65,13 +65,23 @@ resource "aws_security_group" "sample_web_app_allow_80" {
   tags = merge(local.tags, { Name = "sample-web-app" })
 }
 
+resource "aws_alb_target_group" "sample_web_app" {
+  name        = "sample-web-app"
+  port        = 80
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = module.vpc.vpc_id
+
+  tags = local.tags
+}
+
 resource "aws_ecs_service" "sample_web_app" {
   name            = "sample-web-app"
   cluster         = aws_ecs_cluster.default.arn
   task_definition = aws_ecs_task_definition.sample_web_app.arn
   launch_type     = "FARGATE"
 
-  desired_count        = 0
+  desired_count        = var.enable_expensive ? 1 : 0
   force_new_deployment = true
 
   network_configuration {
@@ -80,5 +90,44 @@ resource "aws_ecs_service" "sample_web_app" {
     security_groups  = [aws_security_group.sample_web_app_allow_80.id]
   }
 
+  load_balancer {
+    target_group_arn = aws_alb_target_group.sample_web_app.arn
+    container_name   = "sample-web-app"
+    container_port   = 80
+  }
+
   tags = merge(local.tags, { Name = "sample-web-app" })
+}
+
+resource "aws_alb_listener_rule" "sample_web_app" {
+  listener_arn = local.public_alb_https_listener_arn
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.sample_web_app.arn
+  }
+
+  condition {
+    host_header {
+      values = ["sample-web-app.*"]
+    }
+  }
+
+  count = var.enable_expensive ? 1 : 0
+
+  tags = local.tags
+}
+
+resource "aws_route53_record" "sample_web_app" {
+  name    = "sample-web-app"
+  type    = "A"
+  zone_id = aws_route53_zone.public.id
+
+  alias {
+    evaluate_target_health = false
+    name                   = module.public_alb.lb_dns_name
+    zone_id                = module.public_alb.lb_zone_id
+  }
+
+  count = var.enable_expensive ? 1 : 0
 }
