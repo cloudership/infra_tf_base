@@ -9,7 +9,7 @@ resource "aws_ecs_task_definition" "sample_web_app" {
   container_definitions = jsonencode([
     {
       name      = "sample-web-app"
-      image     = "yeasy/simple-web:latest"
+      image     = "registry.ipv6.docker.com/yeasy/simple-web:latest"
       cpu       = 256
       memory    = 512
       essential = true
@@ -42,37 +42,32 @@ resource "aws_ecs_task_definition" "sample_web_app" {
   tags = local.tags
 }
 
-resource "aws_security_group" "sample_web_app_allow_80" {
+module "sample_web_app_sg" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 4.0"
+
   name   = "sample-web-app"
   vpc_id = module.vpc.vpc_id
 
-  ingress {
-    description = "80 from anywhere"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  egress_rules = ["all-all"]
 
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
+  computed_ingress_with_source_security_group_id = [
+    { rule = "http-80-tcp", source_security_group_id = local.public_alb_sg_internal_id }
+  ]
+  number_of_computed_ingress_with_source_security_group_id = 1
 
-  tags = merge(local.tags, { Name = "sample-web-app" })
+  tags = local.tags
 }
 
 resource "aws_alb_target_group" "sample_web_app" {
-  name        = "sample-web-app"
-  port        = 80
-  protocol    = "HTTP"
-  target_type = "ip"
-  vpc_id      = module.vpc.vpc_id
-
-  tags = local.tags
+  name                 = "sample-web-app"
+  port                 = 80
+  protocol             = "HTTP"
+  target_type          = "ip"
+  ip_address_type      = "ipv6"
+  vpc_id               = module.vpc.vpc_id
+  deregistration_delay = 60
+  tags                 = local.tags
 }
 
 resource "aws_ecs_service" "sample_web_app" {
@@ -85,9 +80,9 @@ resource "aws_ecs_service" "sample_web_app" {
   force_new_deployment = true
 
   network_configuration {
-    subnets          = module.vpc.public_subnets
-    assign_public_ip = true
-    security_groups  = [aws_security_group.sample_web_app_allow_80.id]
+    subnets          = module.vpc.private_subnets
+    assign_public_ip = false
+    security_groups  = [module.sample_web_app_sg.security_group_id]
   }
 
   load_balancer {

@@ -8,9 +8,13 @@ module "public_alb" {
   ip_address_type                  = "dualstack"
   vpc_id                           = module.vpc.vpc_id
   subnets                          = module.vpc.public_subnets
-  security_groups                  = [module.public_alb_sg_external_web.security_group_id]
   enable_cross_zone_load_balancing = true
   create_lb                        = var.enable_expensive
+
+  security_groups = [
+    module.public_alb_sg_external_web.security_group_id,
+    module.public_alb_sg_internal.security_group_id,
+  ]
 
   http_tcp_listeners = [
     {
@@ -23,7 +27,7 @@ module "public_alb" {
         protocol    = "HTTPS"
         status_code = "HTTP_301"
       }
-    }
+    },
   ]
 
   https_listeners = [
@@ -38,15 +42,10 @@ module "public_alb" {
         message_body = ""
         status_code  = 200
       }
-    }
+    },
   ]
 
   tags = local.tags
-}
-
-locals {
-  public_alb_https_listener_id  = one(module.public_alb.https_listener_ids)
-  public_alb_https_listener_arn = one(module.public_alb.https_listener_arns)
 }
 
 module "public_alb_sg_external_web" {
@@ -62,4 +61,23 @@ module "public_alb_sg_external_web" {
   egress_rules        = ["all-all"]
 
   tags = local.tags
+}
+
+module "public_alb_sg_internal" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 4.0"
+
+  name        = "public-alb-sg-internal"
+  description = "Public ALB security group used for internal security rules (eg services permitting forwarded traffic)"
+  vpc_id      = module.vpc.vpc_id
+
+  egress_rules = ["all-all"]
+
+  tags = local.tags
+}
+
+locals {
+  public_alb_https_listener_id  = one(module.public_alb.https_listener_ids)
+  public_alb_https_listener_arn = one(module.public_alb.https_listener_arns)
+  public_alb_sg_internal_id     = module.public_alb_sg_internal.security_group_id
 }
