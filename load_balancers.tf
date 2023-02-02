@@ -1,11 +1,11 @@
 module "public_alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "~> 8.2.2"
+  version = "~> 8.2"
 
   name = "public"
 
   load_balancer_type               = "application"
-  ip_address_type                  = "dualstack"
+  ip_address_type                  = "ipv4"
   vpc_id                           = module.vpc.vpc_id
   subnets                          = module.vpc.public_subnets
   enable_cross_zone_load_balancing = true

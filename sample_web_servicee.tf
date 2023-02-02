@@ -9,7 +9,7 @@ resource "aws_ecs_task_definition" "sample_web_app" {
   container_definitions = jsonencode([
     {
       name      = "sample-web-app"
-      image     = "registry.ipv6.docker.com/yeasy/simple-web:latest"
+      image     = "yeasy/simple-web:latest"
       cpu       = 256
       memory    = 512
       essential = true
@@ -64,7 +64,7 @@ resource "aws_alb_target_group" "sample_web_app" {
   port                 = 80
   protocol             = "HTTP"
   target_type          = "ip"
-  ip_address_type      = "ipv6"
+  ip_address_type      = "ipv4"
   vpc_id               = module.vpc.vpc_id
   deregistration_delay = 60
   tags                 = local.tags
@@ -80,11 +80,12 @@ resource "aws_ecs_service" "sample_web_app" {
   force_new_deployment = true
 
   network_configuration {
-    subnets          = module.vpc.private_subnets
-    assign_public_ip = false
+    subnets          = module.vpc.public_subnets
+    assign_public_ip = true
     security_groups  = [module.sample_web_app_sg.security_group_id]
   }
 
+  # Use dynamic block to remove this if enable_expensive == false
   load_balancer {
     target_group_arn = aws_alb_target_group.sample_web_app.arn
     container_name   = "sample-web-app"
@@ -92,6 +93,8 @@ resource "aws_ecs_service" "sample_web_app" {
   }
 
   tags = merge(local.tags, { Name = "sample-web-app" })
+
+  depends_on = [module.public_alb]
 }
 
 resource "aws_alb_listener_rule" "sample_web_app" {

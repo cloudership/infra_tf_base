@@ -16,11 +16,12 @@ resource "aws_route53_zone" "private" {
 
 module "wildcard_certificate" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 4.3.2"
+  version = "~> 4.3"
 
-  domain_name         = "*.${trimsuffix(aws_route53_zone.public.name, ".")}"
-  zone_id             = aws_route53_zone.public.id
-  wait_for_validation = false
+  domain_name               = trimsuffix(aws_route53_zone.public.name, ".")
+  subject_alternative_names = ["*.${trimsuffix(aws_route53_zone.public.name, ".")}"]
+  zone_id                   = aws_route53_zone.public.id
+  wait_for_validation       = false
 
   tags = local.tags
 }
