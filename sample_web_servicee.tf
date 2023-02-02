@@ -85,11 +85,13 @@ resource "aws_ecs_service" "sample_web_app" {
     security_groups  = [module.sample_web_app_sg.security_group_id]
   }
 
-  # Use dynamic block to remove this if enable_expensive == false
-  load_balancer {
-    target_group_arn = aws_alb_target_group.sample_web_app.arn
-    container_name   = "sample-web-app"
-    container_port   = 80
+  dynamic "load_balancer" {
+    for_each = var.enable_expensive ? [1] : []
+    content {
+      target_group_arn = aws_alb_target_group.sample_web_app.arn
+      container_name   = "sample-web-app"
+      container_port   = 80
+    }
   }
 
   tags = merge(local.tags, { Name = "sample-web-app" })
