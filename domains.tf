@@ -7,6 +7,8 @@ resource "aws_route53_zone" "public" {
 resource "aws_route53_zone" "private" {
   name = "prod.local"
 
+  count = 0
+
   vpc {
     vpc_id = module.vpc.vpc_id
   }
