@@ -14,6 +14,11 @@ variable "enable_expensive" {
   type = bool
 }
 
+variable "allowed_ips" {
+  type    = list(string)
+  default = ["0.0.0.0/32"]
+}
+
 variable "aws_availability_zone_letters" {
   type        = list(string)
   description = <<-EOT

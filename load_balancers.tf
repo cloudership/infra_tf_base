@@ -56,7 +56,7 @@ module "public_alb_sg_external_web" {
   description = "Public ALB security group allowing HTTP and HTTPS access from the internet"
   vpc_id      = module.vpc.vpc_id
 
-  ingress_cidr_blocks = ["0.0.0.0/0"]
+  ingress_cidr_blocks = var.allowed_ips
   ingress_rules       = ["http-80-tcp", "https-443-tcp"]
   egress_rules        = ["all-all"]
 
