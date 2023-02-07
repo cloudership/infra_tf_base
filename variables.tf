@@ -11,7 +11,8 @@ variable "root_domain" {
 }
 
 variable "enable_expensive" {
-  type = bool
+  type    = bool
+  default = true
 }
 
 variable "allowed_ips" {
