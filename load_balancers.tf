@@ -1,6 +1,5 @@
 module "public_alb" {
-  source  = "terraform-aws-modules/alb/aws"
-  version = "~> 8.2"
+  source = "terraform-aws-modules/alb/aws"
 
   name = "public"
 
@@ -49,8 +48,7 @@ module "public_alb" {
 }
 
 module "public_alb_sg_external_web" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 4.0"
+  source = "terraform-aws-modules/security-group/aws"
 
   name        = "public-alb-sg-external-web"
   description = "Public ALB security group allowing HTTP and HTTPS access from the internet"
@@ -64,8 +62,7 @@ module "public_alb_sg_external_web" {
 }
 
 module "public_alb_sg_internal" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 4.0"
+  source = "terraform-aws-modules/security-group/aws"
 
   name        = "public-alb-sg-internal"
   description = "Public ALB security group used for internal security rules (eg services permitting forwarded traffic)"
