@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "public" {
-  name = "prod.${var.project_name}.service.${var.root_domain}"
+  name = "${var.env_name}.${var.project_name}.service.${var.root_domain}"
 
   tags = local.tags
 }
