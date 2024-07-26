@@ -35,3 +35,8 @@ understand AWS. If you use Kubernetes, you have to understand AWS, AND also Kube
 
 So the decision is quite simple: do the simpler thing and use AWS's own container service, and lose a large slice of
 cognitive load. Simplicity is its own reward.
+
+### DBS-2023012101 Only use S3 and DynamoDB VPC endpoints
+
+They are the only ones that are free as they are created via the route table. Others are managed through AWS Private
+Link which is a paid service. Stick to the free ones.
