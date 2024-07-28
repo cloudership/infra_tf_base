@@ -31,14 +31,6 @@ output "public_alb" {
   }
 }
 
-output "ecs_cluster_default_arn" {
-  value = aws_ecs_cluster.default.arn
-}
-
-output "ecs_task_execution_role_arn" {
-  value = aws_iam_role.ecs_task_execution.arn
-}
-
 output "route53_zone_public_id" {
   value = aws_route53_zone.public.id
 }
