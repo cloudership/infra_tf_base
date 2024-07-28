@@ -6,6 +6,19 @@ The prefix of decisions is "DBS" - BS is for "base"
 
 ## List of Decisions
 
+### DBS-2024072802 Allow DB access from any IP address in the VPC (no granular IP restrictions to DB)
+
+For simplicity's sake, the DB can be accessed from anywhere in the VPC and the only access controls are via DB password
+authentication.
+
+### DBS-2024072801 Demo project using free tier as much as possible
+
+This project is to showcase skills and the author is broke. Hence decisions will prioritize cost savings and not
+reliability; however the foundations allow it to easily evolve into a more reliable architecture should the need arise.
+
+As an example: there will be a single DB hosted in a single availability zone for the entire platform under the free
+tier, using a cheap instance type. This can easily be changed via simple refactoring if the need arises.
+
 ### DBS-2024072002 Yes Kubernetes!
 
 Kubernetes is now the defacto container orchestration system, and EKS with Fargate runners solves the management
