@@ -1,7 +1,7 @@
 resource "aws_route53_zone" "public" {
-  name = "${var.env_name}.${var.project_name}.service.${var.root_domain}"
-
-  tags = local.tags
+  name    = "${var.env_name}.${var.project_name}.service.${var.root_domain}"
+  comment = "Public ${var.env_name} domain of the ${var.project_name} project"
+  tags    = local.tags
 }
 
 module "wildcard_certificate" {
