@@ -26,8 +26,8 @@ output "public_alb" {
   value = {
     sg_internal_id     = local.public_alb_sg_internal_id
     https_listener_arn = local.public_alb_https_listener_arn
-    lb_dns_name        = module.public_alb.lb_dns_name
-    lb_zone_id         = module.public_alb.lb_zone_id
+    dns_name           = module.public_alb.dns_name
+    zone_id            = module.public_alb.zone_id
   }
 }
 
