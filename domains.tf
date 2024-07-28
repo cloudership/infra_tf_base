@@ -5,8 +5,7 @@ resource "aws_route53_zone" "public" {
 }
 
 module "wildcard_certificate" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "~> 4.3"
+  source = "terraform-aws-modules/acm/aws"
 
   domain_name               = trimsuffix(aws_route53_zone.public.name, ".")
   subject_alternative_names = ["*.${trimsuffix(aws_route53_zone.public.name, ".")}"]
