@@ -10,6 +10,7 @@ module "wildcard_certificate" {
   domain_name               = trimsuffix(aws_route53_zone.public.name, ".")
   subject_alternative_names = ["*.${trimsuffix(aws_route53_zone.public.name, ".")}"]
   zone_id                   = aws_route53_zone.public.id
+  validation_method         = "DNS"
   wait_for_validation       = false
 
   tags = local.tags
