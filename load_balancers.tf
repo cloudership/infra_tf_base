@@ -39,6 +39,8 @@ module "public_alb" {
     },
   ]
 
+  enable_deletion_protection = false
+
   tags = local.tags
 }
 
