@@ -22,15 +22,6 @@ output "private_subnet_ids" {
   value = module.vpc.private_subnets
 }
 
-output "public_alb" {
-  value = {
-    sg_internal_id     = local.public_alb_sg_internal_id
-    https_listener_arn = local.public_alb_https_listener_arn
-    dns_name           = module.public_alb.dns_name
-    zone_id            = module.public_alb.zone_id
-  }
-}
-
 output "route53_zone_public_id" {
   value = aws_route53_zone.public.id
 }
