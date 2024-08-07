@@ -41,3 +41,12 @@ variable "subnet_mask_bits" {
   type        = number
   description = "Subnet mask bits e.g. 16. Recommended this be set to 16"
 }
+
+variable "eks_instance_type" {
+  type        = string
+  description = <<-EOT
+  Instance type to use for the EKS cluster. No default - set it carefully to take advantage of the free tier.
+  Generally, t2.micro qualifies for the free tier, except for some regions like eu-north-1 where t3.micro qualifies the
+  free tier instead.
+  EOT
+}
