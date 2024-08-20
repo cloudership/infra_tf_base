@@ -5,7 +5,7 @@ module "main_eks_cluster" {
   cluster_name    = "${var.project_name}-main"
   cluster_version = "1.30"
 
-  cluster_endpoint_public_access = true
+  cluster_endpoint_public_access           = true
   enable_cluster_creator_admin_permissions = true
   cluster_upgrade_policy = {
     support_type = "STANDARD"
@@ -26,11 +26,11 @@ module "main_eks_cluster" {
     main = {
       instance_types = [var.eks_instance_type]
 
-      min_size = 1
-      max_size = 1
+      min_size = 2
+      max_size = 3
       # This value is ignored after the initial creation
       # https://github.com/bryantbiggs/eks-desired-size-hack
-      desired_size = 1
+      desired_size = 2
     }
   }
 
