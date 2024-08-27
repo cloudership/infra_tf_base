@@ -1,6 +1,6 @@
 module "main_eks_cluster" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.20"
+  version = "~> 20.24"
 
   cluster_name    = "${var.project_name}-main"
   cluster_version = "1.30"
@@ -26,11 +26,11 @@ module "main_eks_cluster" {
     main = {
       instance_types = [var.eks_instance_type]
 
-      min_size = 2
-      max_size = 3
+      min_size = var.eks_min_nodes
+      max_size = var.eks_max_nodes
       # This value is ignored after the initial creation
       # https://github.com/bryantbiggs/eks-desired-size-hack
-      desired_size = 2
+      desired_size = var.eks_desired_nodes
     }
   }
 

@@ -50,3 +50,18 @@ variable "eks_instance_type" {
   free tier instead.
   EOT
 }
+
+variable "eks_min_nodes" {
+  description = "The minimum number of EC2 nodes in the EKS cluster's main node group."
+  type        = number
+}
+
+variable "eks_max_nodes" {
+  description = "The maximum number of EC2 nodes in the EKS cluster's main node group."
+  type        = number
+}
+
+variable "eks_desired_nodes" {
+  description = "The desired number of EC2 nodes in the EKS cluster's main node group - only used at initialization."
+  type        = number
+}
