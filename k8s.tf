@@ -36,3 +36,15 @@ module "main_eks_cluster" {
 
   tags = local.tags
 }
+
+/* Example of a Fargate profile - would only work if private subnets could access a NAT gateway or instance
+module "main_eks_cluster_main_fargate_profile" {
+  source  = "terraform-aws-modules/eks/aws//modules/fargate-profile"
+  version = "~> 20.24"
+
+  name         = "main"
+  cluster_name = module.main_eks_cluster.cluster_name
+  subnet_ids   = module.vpc.private_subnets
+  selectors    = [{ namespace = "*" }]
+}
+*/
