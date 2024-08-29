@@ -50,27 +50,3 @@ variable "nat_instance_type" {
   free tier instead.
   EOT
 }
-
-variable "eks_instance_type" {
-  type        = string
-  description = <<-EOT
-  Instance type to use for the EKS cluster. No default - set it carefully to take advantage of the free tier.
-  Generally, t2.micro qualifies for the free tier, except for some regions like eu-north-1 where t3.micro qualifies the
-  free tier instead.
-  EOT
-}
-
-variable "eks_min_nodes" {
-  description = "The minimum number of EC2 nodes in the EKS cluster's main node group."
-  type        = number
-}
-
-variable "eks_max_nodes" {
-  description = "The maximum number of EC2 nodes in the EKS cluster's main node group."
-  type        = number
-}
-
-variable "eks_desired_nodes" {
-  description = "The desired number of EC2 nodes in the EKS cluster's main node group - only used at initialization."
-  type        = number
-}
