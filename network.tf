@@ -69,3 +69,19 @@ module "vpc_endpoints" {
 
   tags = local.tags
 }
+
+
+module "nat_instance" {
+  source = "github.com/cloudership/terraform-aws-nat-instance"
+
+  name                        = "${var.project_name}-nat-instance"
+  vpc_id                      = module.vpc.vpc_id
+  public_subnet               = module.vpc.public_subnets[0]
+  private_subnets_cidr_blocks = module.vpc.private_subnets_cidr_blocks
+  private_route_table_ids     = module.vpc.private_route_table_ids
+  instance_types              = [var.nat_instance_type]
+
+  tags = {
+    Name = "${var.project_name}-nat-instance"
+  }
+}
