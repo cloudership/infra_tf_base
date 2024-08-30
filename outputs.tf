@@ -25,3 +25,7 @@ output "private_subnet_ids" {
 # output "route53_zone_public_id" {
 #   value = aws_route53_zone.public.id
 # }
+
+output "eks_addons" {
+  value = module.main_eks_cluster.cluster_addons
+}
