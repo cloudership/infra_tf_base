@@ -26,6 +26,33 @@ output "private_subnet_ids" {
 #   value = aws_route53_zone.public.id
 # }
 
-output "eks_addons" {
-  value = module.main_eks_cluster.cluster_addons
+output "sg_id_rds_access" {
+  value       = module.sg_rds_access.security_group_id
+  description = "Assign this SG to have access to the RDS cluster"
+}
+
+output "sg_arn_rds_access" {
+  value       = module.sg_rds_access.security_group_arn
+  description = "Assign this SG to have access to the RDS cluster"
+}
+
+output "rds_hostname" {
+  value       = split(":", module.db.db_instance_endpoint)[0]
+  description = "Hostname of the PostgreSQL RDS instance"
+}
+
+output "rds_port" {
+  value       = parseint(split(":", module.db.db_instance_endpoint)[1], 10)
+  description = "Port of the PostgreSQL RDS instance"
+}
+
+output "rds_admin_username" {
+  value       = var.db_admin_username
+  description = "admin user's password for the PostgreSQL RDS instance"
+}
+
+output "rds_admin_password" {
+  value       = random_password.db_admin_password.result
+  description = "admin user's password for the PostgreSQL RDS instance"
+  sensitive   = true
 }

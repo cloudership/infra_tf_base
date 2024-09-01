@@ -50,3 +50,9 @@ variable "nat_instance_type" {
   free tier instead.
   EOT
 }
+
+variable "db_admin_username" {
+  type        = string
+  description = "admin user for the PostgreSQL RDS instance"
+  default     = "root"
+}
