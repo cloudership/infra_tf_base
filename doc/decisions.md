@@ -6,6 +6,34 @@ The prefix of decisions is "DBS" - BS is for "base"
 
 ## List of Decisions
 
+### DBS-2024090101 NAT instance instead of NAT gateway
+
+This is purely a cost-saving initiative - using a NAT instance enables use of the EC2 free tier; a real production
+workload should use a NAT gateway.
+
+### DBS-2024083101 RDS instance tailored to simplicity and cost-savings over security and reliability
+
+For simplicity, a single RDS instance will be provisioned. This serves several purposes:
+
+1) As no real workloads are being run, it will suffice.
+2) Having a single DB cluster makes the platform simpler.
+3) It allows use of the free-tier.
+4) Capabilities can easily be upgraded as needed.
+
+The admin password will not use Secrets Manager and instead be set directly. The only benefit of using Secrets Manager
+is more security so for cost-savings and simplicity's sake it will be managed by OpenTofu.
+
+Instance will be opened to public 
+
+A real world platform should configure RDS to use Secrets Manager, enable Multi-AZ, and potentially use several RDS
+instances if required, with the full gamut of protections like KMS encryption, admin password rotation, and regular
+backups.
+
+### DBS-2024082701 EKS cluster uses Fargate pods
+
+Using free-tier EC2 instances as nodes was explored but performance was too slow. Using Fargate pods reduces admin
+overhead and is not very expensive. Maintenance overhead is also reduced.
+
 ### DBS-2024072802 Allow DB access from any IP address in the VPC (no granular IP restrictions to DB)
 
 For simplicity's sake, the DB can be accessed from anywhere in the VPC and the only access controls are via DB password
