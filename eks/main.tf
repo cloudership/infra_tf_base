@@ -1,3 +1,13 @@
+locals {
+  tags = {
+    Component = "base_eks"
+  }
+}
+
+data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}
+
 module "main_eks_cluster" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.24"
@@ -21,13 +31,13 @@ module "main_eks_cluster" {
     vpc-cni                = {}
   }
 
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.public_subnets
+  vpc_id     = var.vpc_id
+  subnet_ids = var.subnet_ids
 
   fargate_profiles = [
     {
       name       = "main"
-      subnet_ids = module.vpc.private_subnets
+      subnet_ids = var.fargate_subnet_ids
       selectors  = [{ namespace = "*" }]
     }
   ]
