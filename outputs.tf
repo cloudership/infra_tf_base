@@ -22,10 +22,6 @@ output "private_subnet_ids" {
   value = module.vpc.private_subnets
 }
 
-# output "route53_zone_public_id" {
-#   value = aws_route53_zone.public.id
-# }
-
 output "sg_id_rds_access" {
   value       = module.sg_rds_access.security_group_id
   description = "Assign this SG to have access to the RDS cluster"
