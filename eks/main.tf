@@ -25,6 +25,10 @@ module "main_eks_cluster" {
   cluster_addons = {
     coredns = {
       "addon_version" = "v1.11.1-eksbuild.11"
+      timeouts = {
+        create = "60m"
+        update = "60m"
+      }
     }
     eks-pod-identity-agent = {}
     kube-proxy             = {}
