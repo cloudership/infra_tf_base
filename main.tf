@@ -1,3 +1,7 @@
+data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}
+
 locals {
   vpc_cidr = "${var.subnet_address}/${var.subnet_mask_bits}"
 
@@ -6,11 +10,10 @@ locals {
   # public and private subnets have 3 equal-sized smaller subnets, one for each AZ.
   subnet_addresses = [for cidr_block in cidrsubnets(local.vpc_cidr, 1, 1) : cidrsubnets(cidr_block, 2, 2, 2)]
 
+  account_id = data.aws_caller_identity.current.account_id
+  aws_region = data.aws_region.current.name
+
   tags = {
     Component = "base"
   }
 }
-
-data "aws_region" "current" {}
-
-data "aws_caller_identity" "current" {}

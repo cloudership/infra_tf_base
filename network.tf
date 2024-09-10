@@ -81,7 +81,7 @@ module "nat_instance" {
   private_route_table_ids     = module.vpc.private_route_table_ids
   instance_types              = [var.nat_instance_type]
 
-  tags = {
+  tags = merge(local.tags, {
     Name = "${var.project_name}-nat-instance"
-  }
+  })
 }
