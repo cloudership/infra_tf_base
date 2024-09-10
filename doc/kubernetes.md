@@ -26,7 +26,7 @@ If an EKS cluster description is shown, proceed. Otherwise, configure AWS CLI ac
 Create a `kubeconfig` (granting same AWS privileges as above aws command):
 
 ```shell
-$ aws eks update-kubeconfig --name showcase-main
+$ aws eks update-kubeconfig --name showcase-main --alias showcase-main --user-alias showcase-main
 ```
 
 This command can be repeated should anything change in the configuration that must be updated into the kubeconfig.
