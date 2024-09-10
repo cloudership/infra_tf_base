@@ -31,7 +31,8 @@ tofu output --raw rds_admin_username
 tofu output --raw rds_admin_password
 
 # If using the infra_management project:
-bin/tg prod base output --raw rds_endpoint
+bin/tg prod base output --raw rds_hostname
+bin/tg prod base output --raw rds_hostname
 bin/tg prod base output --raw rds_admin_username
 bin/tg prod base output --raw rds_admin_password
 ```
