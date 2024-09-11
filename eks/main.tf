@@ -33,9 +33,10 @@ module "main_eks_cluster" {
         update = "60m"
       }
     }
-    eks-pod-identity-agent = {}
-    kube-proxy             = {}
-    vpc-cni                = {}
+    kube-proxy = {}
+    vpc-cni    = {}
+    # Disabled - Fargate pods don't support it, no point wasting money running it
+    # eks-pod-identity-agent = {}
   }
 
   vpc_id     = var.vpc_id
