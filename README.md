@@ -44,6 +44,9 @@ Make sure AWS credentials of the management account are configured in the enviro
 This allows connecting to the RDS instance from a local machine.
 
 ```shell
+# Get instance ID of NAT instance
+aws ec2 describe-instances --filters 'Name=tag:Name,Values=showcase-nat-instance' | jq -Mr '.Reservations[0].Instances[0].InstanceId'
+
 aws ssm start-session \
     --target <NAT_INSTANCE_ID> \
     --document-name AWS-StartPortForwardingSessionToRemoteHost \
