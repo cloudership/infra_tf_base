@@ -25,3 +25,8 @@ variable "subnet_ids" {
 variable "fargate_subnet_ids" {
   type = list(string)
 }
+
+variable "chart_manager_version" {
+  type    = string
+  default = "1.15.3"
+}

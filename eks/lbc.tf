@@ -113,3 +113,34 @@ resource "helm_release" "lbc" {
 
   depends_on = [module.main_eks_cluster]
 }
+
+resource "helm_release" "cert_manager" {
+  repository      = "https://charts.jetstack.io"
+  force_update    = true
+  name            = "cert-manager"
+  chart           = "cert-manager"
+  namespace       = "cert-manager"
+  version         = "v${var.chart_manager_version}"
+  cleanup_on_fail = true
+  atomic          = true
+  timeout         = 900
+
+  create_namespace = true
+
+  set {
+    name  = "crds.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "crds.keep"
+    value = "true"
+  }
+
+  set {
+    name  = "webhook.securePort"
+    value = "10260"
+  }
+
+  depends_on = [module.main_eks_cluster]
+}
