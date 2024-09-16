@@ -6,6 +6,11 @@ The prefix of decisions is "DBS" - BS is for "base"
 
 ## List of Decisions
 
+### DBS-2024091501 Install AWS Load Balancer Controller manually without external TF modules
+
+The Terraform/OpenTofu modules out there are out of date, and strongly coupled to their own EKS set up modules. The IAM
+policies they use are also out of date. Using them as inspiration and doing it ourselves is more secure and more suited.
+
 ### DBS-2024090101 NAT instance instead of NAT gateway
 
 This is purely a cost-saving initiative - using a NAT instance enables use of the EC2 free tier; a real production
