@@ -52,3 +52,15 @@ module "main_eks_cluster" {
 
   tags = local.tags
 }
+
+data "aws_eks_cluster_auth" "main_eks_cluster" {
+  name = module.main_eks_cluster.cluster_name
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = module.main_eks_cluster.cluster_endpoint
+    token                  = data.aws_eks_cluster_auth.main_eks_cluster.token
+    cluster_ca_certificate = base64decode(module.main_eks_cluster.cluster_certificate_authority_data)
+  }
+}
