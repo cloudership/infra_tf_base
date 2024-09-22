@@ -2,7 +2,7 @@
 # Reference:https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/deploy/installation/
 # Inspiration: https://github.com/Young-ook/terraform-aws-eks/blob/1.7.11/modules/lb-controller/main.tf
 
-# This JSSON file is downloaded by following instructions at
+# This JSON file is downloaded by following instructions at
 # https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/deploy/installation/#option-a-recommended-iam-roles-for-service-accounts-irsa
 # If replacing the file, the statements for ec2:AuthorizeSecurityGroupIngress and ec2:RevokeSecurityGroupIngress MUST be
 # removed
