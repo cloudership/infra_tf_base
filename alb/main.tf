@@ -14,9 +14,10 @@ locals {
 module "alb_public" {
   source = "terraform-aws-modules/alb/aws"
 
-  name    = "${var.project_name}-${var.env_name}-${var.name}"
-  vpc_id  = var.vpc_id
-  subnets = var.subnet_ids
+  name                       = "${var.project_name}-${var.env_name}-${var.name}"
+  vpc_id                     = var.vpc_id
+  subnets                    = var.subnet_ids
+  enable_deletion_protection = false
 
   security_group_ingress_rules = {
     all_http = {
