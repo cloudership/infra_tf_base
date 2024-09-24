@@ -6,10 +6,14 @@ The prefix of decisions is "DBS" - BS is for "base"
 
 ## List of Decisions
 
-### DBS-2024091601 Install cert-manager alongside AWS Load Balancer Controller in EKS cluster
+### DBS-2024092401 Do NOT install cert-manager - AWS LBC can use self-signed certs
 
-The need for cert-manager alongside AWS Load Balancer Controller
-[is described here](https://www.reddit.com/r/kubernetes/comments/1d2etqs/comment/l60ejlt/)
+LBC used cert-manager to generate and rotate self-signed certs for the webhooks it uses to monitor pod lifecycle. However, the helm charts can generate self-signed certs. This obviously is not as secure but since this project is not for a bank, the simplicity of not having to install another support service is preferred.
+
+### ~~DBS-2024091601 Install cert-manager alongside AWS Load Balancer Controller in EKS cluster~~
+
+~~The need for cert-manager alongside AWS Load Balancer Controller
+[is described here](https://www.reddit.com/r/kubernetes/comments/1d2etqs/comment/l60ejlt/)~~
 
 ### DBS-2024091501 Install AWS Load Balancer Controller manually without external TF modules
 

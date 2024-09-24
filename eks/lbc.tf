@@ -1,11 +1,13 @@
 # AWS Load Balancer Controller for EKS
 # Reference:https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/deploy/installation/
 # Inspiration: https://github.com/Young-ook/terraform-aws-eks/blob/1.7.11/modules/lb-controller/main.tf
+# How to upgrade: https://github.com/aws/eks-charts/blob/master/stable/aws-load-balancer-controller/README.md#Upgrade
 
 # This JSON file is downloaded by following instructions at
 # https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/deploy/installation/#option-a-recommended-iam-roles-for-service-accounts-irsa
 # If replacing the file, the statements for ec2:AuthorizeSecurityGroupIngress and ec2:RevokeSecurityGroupIngress MUST be
 # removed
+
 data "local_file" "json_aws_iam_policy_document_irsa_lbc" {
   filename = "${path.module}/aws_iam_policy_document_irsa_lbc.json"
 }
@@ -111,35 +113,9 @@ resource "helm_release" "lbc" {
     value = module.main_eks_cluster.cluster_name
   }
 
-  depends_on = [module.main_eks_cluster]
-}
-
-resource "helm_release" "cert_manager" {
-  repository      = "https://charts.jetstack.io"
-  force_update    = true
-  name            = "cert-manager"
-  chart           = "cert-manager"
-  namespace       = "cert-manager"
-  version         = "v${var.chart_manager_version}"
-  cleanup_on_fail = true
-  atomic          = true
-  timeout         = 900
-
-  create_namespace = true
-
   set {
-    name  = "crds.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "crds.keep"
-    value = "true"
-  }
-
-  set {
-    name  = "webhook.securePort"
-    value = "10260"
+    name  = "enableCertManager"
+    value = false
   }
 
   depends_on = [module.main_eks_cluster]
