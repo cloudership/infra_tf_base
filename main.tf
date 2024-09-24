@@ -17,3 +17,11 @@ locals {
     Component = "base"
   }
 }
+
+module "domains" {
+  source       = "./domains"
+  aws_region   = var.aws_region
+  env_name     = var.env_name
+  project_name = var.project_name
+  root_domain  = var.root_domain
+}
