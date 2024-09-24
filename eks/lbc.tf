@@ -5,15 +5,17 @@
 
 # This JSON file is downloaded by following instructions at
 # https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/deploy/installation/#option-a-recommended-iam-roles-for-service-accounts-irsa
-# If replacing the file, the statements for ec2:AuthorizeSecurityGroupIngress and ec2:RevokeSecurityGroupIngress MUST be
-# removed
+# If replacing the file, make the following changes: remove the statements for ec2:AuthorizeSecurityGroupIngress and
+# ec2:RevokeSecurityGroupIngress; remove the statements for
 
 data "local_file" "json_aws_iam_policy_document_irsa_lbc" {
   filename = "${path.module}/aws_iam_policy_document_irsa_lbc.json"
 }
 
-data "aws_iam_policy_document" "irsa_lbc_security_group_ingress_policy" {
+data "aws_iam_policy_document" "irsa_lbc_custom_policy" {
   statement {
+    sid = "AllowLBCToManageIngressSecurityGroups"
+
     effect = "Allow"
 
     actions = [
@@ -34,6 +36,21 @@ data "aws_iam_policy_document" "irsa_lbc_security_group_ingress_policy" {
       variable = "aws:ResourceTag/kubernetes.io/cluster/${module.main_eks_cluster.cluster_name}"
       values   = ["false"]
     }
+  }
+
+  statement {
+    sid = "DisallowLBCFromCreatingLbResources"
+
+    effect = "Deny"
+
+    actions = [
+      "elasticloadbalancing:CreateLoadBalancer",
+      "elasticloadbalancing:CreateTargetGroup",
+      "elasticloadbalancing:CreateListener",
+      "elasticloadbalancing:CreateRule",
+    ]
+
+    resources = ["*"]
   }
 }
 
@@ -70,13 +87,13 @@ resource "aws_iam_role" "irsa_lbc" {
   name = "${title(var.project_name)}AWSLoadBalancerController"
 
   inline_policy {
-    name   = "allow-lbc-to-manage-resources"
+    name   = "AllowLBCToManageResources"
     policy = data.local_file.json_aws_iam_policy_document_irsa_lbc.content
   }
 
   inline_policy {
-    name   = "allow-lbc-to-manage-ingress-security-groups"
-    policy = data.aws_iam_policy_document.irsa_lbc_security_group_ingress_policy.json
+    name   = "LBCCustomPolicy"
+    policy = data.aws_iam_policy_document.irsa_lbc_custom_policy.json
   }
 
   assume_role_policy = data.aws_iam_policy_document.oidc_assume_role_lbc.json
