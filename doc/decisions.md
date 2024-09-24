@@ -6,6 +6,11 @@ The prefix of decisions is "DBS" - BS is for "base"
 
 ## List of Decisions
 
+### DBS-2024092402 Manage AWS load balancers directly and use TargetGroupBinding feature of AWS LBC to connect pods
+
+By default, AWS LBC spawns and manages load balancers itself. This may seem easier but for a simpler project it is worth having fewer moving parts. So use TF to manage load balancers/listeners/listener rules/target groups, and connect to them via
+[LBC target group bindings](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.8/guide/targetgroupbinding/targetgroupbinding/).
+
 ### DBS-2024092401 Do NOT install cert-manager - AWS LBC can use self-signed certs
 
 LBC used cert-manager to generate and rotate self-signed certs for the webhooks it uses to monitor pod lifecycle. However, the helm charts can generate self-signed certs. This obviously is not as secure but since this project is not for a bank, the simplicity of not having to install another support service is preferred.

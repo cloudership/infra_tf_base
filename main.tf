@@ -25,3 +25,13 @@ module "domains" {
   project_name = var.project_name
   root_domain  = var.root_domain
 }
+
+module "alb_public" {
+  source       = "./alb"
+  aws_region   = var.aws_region
+  env_name     = var.env_name
+  project_name = var.project_name
+  name         = "public"
+  vpc_id       = module.vpc.vpc_id
+  subnet_ids   = module.vpc.public_subnets
+}
