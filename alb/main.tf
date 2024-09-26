@@ -56,3 +56,19 @@ module "alb_public" {
 
   tags = local.tags
 }
+
+resource "aws_alb_listener" "alb_public_https_listener" {
+  load_balancer_arn = module.alb_public.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = var.wildcard_certificate_arn
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      status_code  = 404
+    }
+  }
+}
