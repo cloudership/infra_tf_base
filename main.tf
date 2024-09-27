@@ -34,4 +34,5 @@ module "alb" {
   vpc_id                   = module.vpc.vpc_id
   subnet_ids               = module.vpc.public_subnets
   wildcard_certificate_arn = module.domains.public_wildcard_certificate_arn
+  allowed_ipv4             = var.allowed_ipv4
 }

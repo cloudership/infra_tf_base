@@ -34,14 +34,14 @@ module "alb_public" {
       to_port     = 80
       ip_protocol = "tcp"
       description = "HTTP web traffic"
-      cidr_ipv4   = "0.0.0.0/0"
+      cidr_ipv4   = var.allowed_ipv4
     }
     all_https = {
       from_port   = 443
       to_port     = 443
       ip_protocol = "tcp"
       description = "HTTPS web traffic"
-      cidr_ipv4   = "0.0.0.0/0"
+      cidr_ipv4   = var.allowed_ipv4
     }
   }
   security_group_egress_rules = {
