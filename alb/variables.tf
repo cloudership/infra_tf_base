@@ -18,11 +18,6 @@ variable "subnet_ids" {
   type = list(string)
 }
 
-variable "name" {
-  type        = string
-  description = "Name of the ALB (e.g. 'main')"
-}
-
 variable "wildcard_certificate_arn" {
   type        = string
   description = "ARN of a wildcard certificate to cover all domains that will be served by the load balancers."

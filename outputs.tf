@@ -54,17 +54,17 @@ output "rds_admin_password" {
 }
 
 output "alb_public_zone_id" {
-  value       = module.alb_public.zone_id
-  description = "Canonical hosted zone ID of the public load balancer (to be used in a Route 53 Alias record)."
+  value       = module.alb.zone_id
+  description = "Canonical hosted zone ID of the public ALB's (to be used in a Route 53 Alias record)."
 }
 
 output "alb_public_dns_name" {
-  value       = module.alb_public.dns_name
-  description = "Canonical DNS name of the load balancer (to be used in a Route 53 Alias record)."
+  value       = module.alb.dns_name
+  description = "Canonical DNS name of the public ALB's (to be used in a Route 53 Alias record)."
 }
 
 output "alb_public_https_listener_arn" {
-  value       = module.alb_public.https_listener_arn
+  value       = module.alb.https_listener_arn
   description = "ARN of the public ALB's HTTPS listener - used to attach listener rules and target groups"
 }
 

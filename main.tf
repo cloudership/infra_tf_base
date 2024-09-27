@@ -26,12 +26,11 @@ module "domains" {
   root_domain  = var.root_domain
 }
 
-module "alb_public" {
+module "alb" {
   source                   = "./alb"
   aws_region               = var.aws_region
   env_name                 = var.env_name
   project_name             = var.project_name
-  name                     = "public"
   vpc_id                   = module.vpc.vpc_id
   subnet_ids               = module.vpc.public_subnets
   wildcard_certificate_arn = module.domains.public_wildcard_certificate_arn

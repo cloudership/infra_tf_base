@@ -11,13 +11,22 @@ locals {
   }
 }
 
+resource "aws_security_group" "sg_public_source" {
+  name        = "alb-public-source"
+  description = "Source security group for rules that allow traffic from the public ALB (e.g. assigned to k8s TargetGroupBinding to allow ALB traffic to Fargate pods)"
+  vpc_id      = var.vpc_id
+
+  tags = local.tags
+}
+
 module "alb_public" {
   source = "terraform-aws-modules/alb/aws"
 
-  name                       = "${var.project_name}-${var.env_name}-${var.name}"
+  name                       = "${var.project_name}-${var.env_name}-public"
   vpc_id                     = var.vpc_id
   subnets                    = var.subnet_ids
   enable_deletion_protection = false
+  create_security_group      = true
 
   security_group_ingress_rules = {
     all_http = {
@@ -41,6 +50,10 @@ module "alb_public" {
       cidr_ipv4   = "0.0.0.0/0"
     }
   }
+
+  security_group_tags = local.tags
+
+  security_groups = [aws_security_group.sg_public_source.id]
 
   listeners = {
     redirect_http_to_https = {
