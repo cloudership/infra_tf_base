@@ -45,12 +45,9 @@ This allows connecting to the RDS instance from a local machine.
 
 ```shell
 # Get instance ID of NAT instance
-aws ec2 describe-instances --filters 'Name=tag:Name,Values=showcase-nat-instance' | jq -Mr '.Reservations[0].Instances[0].InstanceId'
+aws --profile Prod ec2 describe-instances --filters 'Name=tag:Name,Values=showcase-nat-instance' | jq -Mr '.Reservations[0].Instances[0].InstanceId'
 
-aws ssm start-session \
-    --target <NAT_INSTANCE_ID> \
-    --document-name AWS-StartPortForwardingSessionToRemoteHost \
-    --parameters '{"host":["<RDS_HOSTNAME>"],"portNumber":["5432"],"localPortNumber":["15432"]}'
+aws --profile Prod ssm start-session --target <NAT_INSTANCE_ID> --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters '{"host":["db.internal.prod.showcase.service.mlops-showcase.co.uk"],"portNumber":["5432"],"localPortNumber":["15432"]}'
 ```
 
 Make sure AWS credentials of the NAT instance account are configured in the environment.
