@@ -75,3 +75,11 @@ output "route53_zone_public_id" {
 output "public_domain_prefix" {
   value = module.domains.public_domain_prefix
 }
+
+output "redis_hostname" {
+  value = aws_route53_record.redis.fqdn
+}
+
+output "redis_port" {
+  value = module.redis.cluster_cache_nodes[0]["port"]
+}
