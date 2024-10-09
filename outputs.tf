@@ -33,12 +33,12 @@ output "sg_arn_rds_access" {
 }
 
 output "rds_hostname" {
-  value       = split(":", module.db.db_instance_endpoint)[0]
+  value       = module.db.db_instance_address
   description = "Hostname of the PostgreSQL RDS instance"
 }
 
 output "rds_port" {
-  value       = parseint(split(":", module.db.db_instance_endpoint)[1], 10)
+  value       = module.db.db_instance_port
   description = "Port of the PostgreSQL RDS instance"
 }
 
