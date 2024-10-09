@@ -54,3 +54,11 @@ module "sg_rds_access" {
 
   tags = local.tags
 }
+
+resource "aws_route53_record" "db" {
+  zone_id = module.domains.route53_zone_public_id
+  name    = "db.internal"
+  type    = "CNAME"
+  ttl     = 300
+  records = [module.db.db_instance_address]
+}
