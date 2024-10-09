@@ -33,7 +33,7 @@ output "sg_arn_rds_access" {
 }
 
 output "rds_hostname" {
-  value       = module.db.db_instance_address
+  value       = aws_route53_record.db.fqdn
   description = "Hostname of the PostgreSQL RDS instance"
 }
 
