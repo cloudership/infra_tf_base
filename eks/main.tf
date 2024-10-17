@@ -13,7 +13,7 @@ locals {
 
 module "main_eks_cluster" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.24"
+  version = "~> 20.26"
 
   cluster_name    = "${var.project_name}-main"
   cluster_version = "1.31"
@@ -42,13 +42,27 @@ module "main_eks_cluster" {
   vpc_id     = var.vpc_id
   subnet_ids = var.subnet_ids
 
-  fargate_profiles = [
-    {
-      name       = "main"
+  fargate_profiles = {
+    main = {
+      create = var.enable_fargate
+
       subnet_ids = var.fargate_subnet_ids
       selectors  = [{ namespace = "*" }]
     }
-  ]
+  }
+
+  eks_managed_node_groups = {
+    main = {
+      create = !var.enable_fargate
+
+      instance_types = [var.instance_type]
+      min_size       = var.min_nodes
+      max_size       = var.max_nodes
+      # This value is ignored after the initial creation
+      # https://github.com/bryantbiggs/eks-desired-size-hack
+      desired_size = var.min_nodes
+    }
+  }
 
   tags = local.tags
 }
