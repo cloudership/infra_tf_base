@@ -27,7 +27,7 @@ module "main_eks_cluster" {
   # EKS Addons
   cluster_addons = {
     coredns = {
-      "addon_version" = "v1.11.1-eksbuild.11"
+      "addon_version" = "v1.11.3-eksbuild.1"
       timeouts = {
         create = "60m"
         update = "60m"
