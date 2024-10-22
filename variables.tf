@@ -20,9 +20,9 @@ variable "enable_expensive" {
 }
 
 variable "allowed_ipv4" {
-  type        = string
-  description = "IP address range allowed to access public resources. Defaults to 0.0.0.0/0 (all)"
-  default     = "0.0.0.0/0"
+  type        = map(string)
+  description = "Named list of IP address ranges allowed to access the public ALB. Defaults to unrestricted access"
+  default     = { all = "0.0.0.0/0" }
 }
 
 variable "aws_availability_zone_letters" {

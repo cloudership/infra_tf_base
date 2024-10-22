@@ -28,22 +28,31 @@ module "alb_public" {
   enable_deletion_protection = false
   create_security_group      = true
 
-  security_group_ingress_rules = {
-    all_http = {
-      from_port   = 80
-      to_port     = 80
-      ip_protocol = "tcp"
-      description = "HTTP web traffic"
-      cidr_ipv4   = var.allowed_ipv4
-    }
-    all_https = {
-      from_port   = 443
-      to_port     = 443
-      ip_protocol = "tcp"
-      description = "HTTPS web traffic"
-      cidr_ipv4   = var.allowed_ipv4
-    }
-  }
+  security_group_ingress_rules = merge(
+    merge(
+      {
+        for name, cidr in var.allowed_ipv4 :
+        "${name}_http" => {
+          from_port   = 80
+          to_port     = 80
+          ip_protocol = "tcp"
+          description = "HTTP web traffic from ${name}"
+          cidr_ipv4   = cidr
+        }
+      },
+      {
+        for name, cidr in var.allowed_ipv4 :
+        "${name}_https" => {
+          from_port   = 443
+          to_port     = 443
+          ip_protocol = "tcp"
+          description = "HTTPS web traffic from ${name}"
+          cidr_ipv4   = cidr
+        }
+      }
+    )
+  )
+
   security_group_egress_rules = {
     all = {
       ip_protocol = "-1"
